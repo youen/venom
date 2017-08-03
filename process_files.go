@@ -47,7 +47,7 @@ func getFilesPath(path []string, exclude []string) []string {
 					break
 				}
 			}
-			if !toExclude && (strings.HasSuffix(fp, ".yml") || strings.HasSuffix(fp, ".yaml")) {
+			if !toExclude && (strings.HasSuffix(fp, ".yml") || strings.HasSuffix(fp, ".yaml") || strings.HasSuffix(fp, ".feature")) {
 				filesPath = append(filesPath, fp)
 			}
 		}
@@ -61,6 +61,8 @@ func getFilesPath(path []string, exclude []string) []string {
 
 func readFiles(variables map[string]string, detailsLevel string, filesPath []string, chanToRun chan<- TestSuite, writer io.Writer) (map[string]*pb.ProgressBar, error) {
 	bars := make(map[string]*pb.ProgressBar)
+
+	log.Debugf("Reading files %v", filesPath)
 
 	for _, f := range filesPath {
 		dat, errr := ioutil.ReadFile(f)
@@ -78,7 +80,13 @@ func readFiles(variables map[string]string, detailsLevel string, filesPath []str
 			for _, i := range gherkinDocument.Feature.Children {
 				scenario, ok := i.(*gherkin.Scenario)
 				if ok {
-					_ = scenario
+					log.Debugf("Parsing Scenario %s", scenario.Name)
+					for _, step := range scenario.Steps {
+						switch step.Keyword {
+						default:
+							log.Debug("Step %s", step.Keyword)
+						}
+					}
 				}
 			}
 		} else {
