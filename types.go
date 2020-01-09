@@ -48,10 +48,10 @@ func (h *H) AddAllWithPrefix(p string, h2 H) {
 // Aliases contains list of aliases
 type Aliases map[string]string
 
-// ExecutorResult represents an executor result on a test step
-type ExecutorResult map[string]interface{}
+// ModuleResult represents an executor result on a test step
+type ModuleResult map[string]interface{}
 
-func (e ExecutorResult) H() H {
+func (e ModuleResult) H() H {
 	out := make(H, len(e))
 	for k, v := range e {
 		out.Add(k, fmt.Sprintf("%v", v))
@@ -69,10 +69,10 @@ type StepExtracts struct {
 	Extracts map[string]string `json:"extracts,omitempty" yaml:"extracts,omitempty"`
 }
 
-// Executor execute a testStep.
-type Executor interface {
+// Module execute a testStep.
+type Module interface {
 	// Run run a Test Step
-	Run(TestContext, TestStep) (ExecutorResult, error)
+	Run(TestContext, TestStep) (ModuleResult, error)
 }
 
 // TestContext represents the context initialized over a test suite or a test case testcase
@@ -85,13 +85,13 @@ type TestContext interface {
 
 // ExecutorWithDefaultAssertions define default assertions on a Eexcutor
 type ExecutorWithDefaultAssertions interface {
-	Executor
+	Module
 	// GetDefaultAssertion returns default assertions
 	GetDefaultAssertions() *StepAssertions
 }
 
 type executorWithZeroValueResult interface {
-	ZeroValueResult() ExecutorResult
+	ZeroValueResult() ModuleResult
 }
 
 // Tests contains all informations about tests in a pipeline build
@@ -250,7 +250,7 @@ type Skipped struct {
 // Failure contains data related to a failed test.
 type Failure struct {
 	Value   string         `xml:",cdata" json:"value" yaml:"value,omitempty"`
-	Result  ExecutorResult `xml:"-" json:"-" yaml:"-"`
+	Result  ModuleResult `xml:"-" json:"-" yaml:"-"`
 	Type    string         `xml:"type,attr,omitempty" json:"type" yaml:"type,omitempty"`
 	Message string         `xml:"message,attr,omitempty" json:"message" yaml:"message,omitempty"`
 }

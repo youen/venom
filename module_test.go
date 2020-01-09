@@ -46,7 +46,7 @@ func Test_getModule(t *testing.T) {
 			mod: executorModule{
 				entrypoint: "tests/fixtures/test-module-should-succeed/test-module_linux_amd64",
 				manifest: VenomModuleManifest{
-					Type:             "executor",
+					Type:             "moduleCommand",
 					Name:             "dummy",
 					Author:           "François SAMIN",
 					InstallationPath: "",

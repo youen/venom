@@ -9,3 +9,15 @@ coverage.*
 *.dump
 test_results.xml
 cmd/venom/venom
+venom.test
+
+# modules
+modules/dbfixtures/dbfixtures
+modules/exec/exec
+modules/grpc/grpc
+modules/http/http
+modules/imap/imap
+modules/kafka/kafka
+modules/ovhapi/ovhapi
+modules/readfile/readfile
+modules/readfile/smtp

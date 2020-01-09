@@ -50,7 +50,7 @@ import (
 //			return nil, nil, err
 //		}
 //
-//		withZero, ok := exec.executor.(executorWithZeroValueResult)
+//		withZero, ok := exec.module.(executorWithZeroValueResult)
 //		if ok {
 //			defaultResult := withZero.ZeroValueResult()
 //			dumpE, err := dump.ToStringMap(defaultResult, dump.WithDefaultLowerCaseFormatter())

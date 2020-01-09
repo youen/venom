@@ -36,7 +36,7 @@ type assertionsApplied struct {
 }
 
 // applyChecks apply checks on result, return true if all assertions are OK, false otherwise
-func applyChecks(executorResult ExecutorResult, tcName string, stepNumber int, step TestStep, defaultAssertions *StepAssertions) assertionsApplied {
+func applyChecks(executorResult ModuleResult, tcName string, stepNumber int, step TestStep, defaultAssertions *StepAssertions) assertionsApplied {
 	res := applyAssertions(executorResult, tcName, stepNumber, step, defaultAssertions)
 	if !res.ok {
 		return res
@@ -44,7 +44,7 @@ func applyChecks(executorResult ExecutorResult, tcName string, stepNumber int, s
 	return res
 }
 
-func applyAssertions(executorResult ExecutorResult, tcName string, stepNumber int, step TestStep, defaultAssertions *StepAssertions) assertionsApplied {
+func applyAssertions(executorResult ModuleResult, tcName string, stepNumber int, step TestStep, defaultAssertions *StepAssertions) assertionsApplied {
 	var sa StepAssertions
 	var errors []Failure
 	var failures []Failure
@@ -88,7 +88,7 @@ func applyAssertions(executorResult ExecutorResult, tcName string, stepNumber in
 	return assertionsApplied{isOK, errors, failures, systemout, systemerr}
 }
 
-func check(tcName string, stepNumber int, assertion string, executorResult ExecutorResult) (*Failure, *Failure) {
+func check(tcName string, stepNumber int, assertion string, executorResult ModuleResult) (*Failure, *Failure) {
 	assert := splitAssertion(assertion)
 	if len(assert) < 2 {
 		return &Failure{Value: RemoveNotPrintableChar(fmt.Sprintf("invalid assertion '%s' len:'%d'", assertion, len(assert)))}, nil
@@ -106,7 +106,7 @@ func check(tcName string, stepNumber int, assertion string, executorResult Execu
 		}
 		return &Failure{Value: RemoveNotPrintableChar(fmt.Sprintf("key '%s' does not exist in result of executor: %+v", assert[0], executorResultKeys))}, nil
 	} else if assert[1] == "ShouldNotExist" {
-		return &Failure{Value: RemoveNotPrintableChar(fmt.Sprintf("key '%s' should not exist in result of executor. Value: %+v", assert[0], actual))}, nil
+		return &Failure{Value: RemoveNotPrintableChar(fmt.Sprintf("key '%s' should not exist in result of module. Value: %+v", assert[0], actual))}, nil
 	}
 
 	f, ok := assertMap[assert[1]]

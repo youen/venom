@@ -10,7 +10,7 @@ import (
 
 func Test_executorModule(t *testing.T) {
 	m := executorModule{
-		entrypoint: "dist/executors/http/http_" + runtime.GOOS + "_" + runtime.GOARCH,
+		entrypoint: "dist/modules/http/http_" + runtime.GOOS + "_" + runtime.GOARCH,
 	}
 
 	v := New()
@@ -20,12 +20,12 @@ func Test_executorModule(t *testing.T) {
 	ctxMod, _ := v.getContextModule("")
 	ctx, _ := ctxMod.New(context.Background(), nil)
 
-	executor, err := m.New(ctx, v, TestLogger{t})
+	module, err := m.New(ctx, v, TestLogger{t})
 	assert.NoError(t, err)
-	assert.NotNil(t, executor)
+	assert.NotNil(t, module)
 
-	res, err := executor.Run(ctx, nil)
-	assert.NoError(t, err)
+	res, err := module.Run(ctx, nil) 
+	assert.NoError(t, err) 
 	assert.Nil(t, res)
 
 }
@@ -34,7 +34,7 @@ func Test_getExecutorModule(t *testing.T) {
 
 	v := New()
 	v.init()
-	v.ConfigurationDirectory = "./dist/executors"
+	v.ConfigurationDirectory = "./dist/modules"
 	v.LogLevel = LogLevelDebug
 
 	step := TestStep{

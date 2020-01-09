@@ -184,7 +184,7 @@ func getModuleManifest(moduleEntryPointPath string) (VenomModuleManifest, error)
 func newModule(moduleEntryPointPath string, manifest VenomModuleManifest) VenomModule {
 	var mod VenomModule
 	switch manifest.Type {
-	case "executor":
+	case "moduleCommand":
 		return executorModule{
 			entrypoint: moduleEntryPointPath,
 			manifest:   manifest,

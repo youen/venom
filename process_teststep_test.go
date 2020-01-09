@@ -40,7 +40,7 @@ func (t TestLogger) Fatalf(format string, args ...interface{}) {
 
 func TestRunTestStep(t *testing.T) {
 	v := New()
-	v.ConfigurationDirectory = "./dist/executors"
+	v.ConfigurationDirectory = "./dist/modules"
 	v.LogLevel = LogLevelDebug
 	step := TestStep{
 		"type":   "http",

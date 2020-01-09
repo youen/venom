@@ -28,9 +28,9 @@ func (e executorModule) Manifest() VenomModuleManifest {
 	return e.manifest
 }
 
-func (e executorModule) New(ctx context.Context, v *Venom, l Logger) (Executor, error) {
+func (e executorModule) New(ctx context.Context, v *Venom, l Logger) (Module, error) {
 	var starter executorStarter
-	starter.l = LoggerWithField(l, "executor", e.manifest.Name)
+	starter.l = LoggerWithField(l, "module", e.manifest.Name)
 	starter.v = v
 	starter.executorModule = e
 	starter.logServer = syslog.NewServer()
@@ -110,7 +110,7 @@ type executorStarter struct {
 	executorModule
 }
 
-func (e *executorStarter) Run(ctx TestContext, step TestStep) (ExecutorResult, error) {
+func (e *executorStarter) Run(ctx TestContext, step TestStep) (ModuleResult, error) {
 	if step == nil {
 		return nil, nil
 	}
@@ -168,7 +168,7 @@ func (e *executorStarter) Run(ctx TestContext, step TestStep) (ExecutorResult, e
 	}
 
 	// Unmarshal the result
-	var res ExecutorResult
+	var res ModuleResult
 	if err := yaml.Unmarshal(btes, &res); err != nil {
 		return nil, fmt.Errorf("unable to parse module output: %v", err)
 	}
@@ -249,7 +249,7 @@ func (v *Venom) getExecutorModule(step TestStep) (*executorModule, error) {
 		if stepType == "" {
 			stepType = "exec"
 		}
-		if ok && manifest.Type == "executor" && stepType == manifest.Name {
+		if ok && manifest.Type == "moduleCommand" && stepType == manifest.Name {
 			mod = &e
 			break
 		}

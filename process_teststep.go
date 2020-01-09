@@ -7,10 +7,10 @@ import (
 )
 
 // RunTestStep executes a venom testcase is a venom context
-func (v *Venom) RunTestStep(ctx TestContext, tcName string, stepNumber int, step TestStep, l Logger) (ExecutorResult, assertionsApplied, error) {
+func (v *Venom) RunTestStep(ctx TestContext, tcName string, stepNumber int, step TestStep, l Logger) (ModuleResult, assertionsApplied, error) {
 	var assertRes assertionsApplied
 	var retry int
-	var result ExecutorResult
+	var result ModuleResult
 
 	e, err := v.getExecutorModule(step)
 	if err != nil {
@@ -48,7 +48,7 @@ func (v *Venom) getDefaultAssertions(ctx TestContext, e *executorModule) (*StepA
 	return e.GetDefaultAssertions(ctx)
 }
 
-func (v *Venom) runTestStepExecutor(ctx TestContext, step TestStep, l Logger, e *executorModule) (ExecutorResult, error) {
+func (v *Venom) runTestStepExecutor(ctx TestContext, step TestStep, l Logger, e *executorModule) (ModuleResult, error) {
 	stepCtx := ctx.(context.Context)
 	if e.timeout > 0 {
 		var cancel context.CancelFunc
@@ -60,7 +60,7 @@ func (v *Venom) runTestStepExecutor(ctx TestContext, step TestStep, l Logger, e 
 		return nil, err
 	}
 
-	ch := make(chan ExecutorResult)
+	ch := make(chan ModuleResult)
 	cherr := make(chan error)
 	go func() {
 		result, err := runner.Run(ctx, step)
